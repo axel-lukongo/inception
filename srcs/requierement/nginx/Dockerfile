@@ -15,3 +15,6 @@ RUN mkdir -p /var/run/nginx
 #Copy the new configuration inside nginx
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
+EXPOSE 443
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
