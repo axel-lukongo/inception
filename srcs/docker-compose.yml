@@ -1,0 +1,17 @@
+version: "3"
+services:
+
+  nginx:
+    container_name: nginx
+    build: /requirements/nginx
+    ports:
+      - "443:443"
+    env_file: 
+      .env
+    volumes:
+      - wp_files:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+      - inception
+    restart: unless-stopped
