@@ -1,22 +1,7 @@
 version: "3"
 
-volumes:
-     wp_database: 
-       driver: local
-       driver_opts:
-         type: 'none'
-         device: '/home/${USER}/data/wp_database'
-         o: 'bind'
-     wp_files:
-       driver: local
-       driver_opts:
-         type: 'none'
-         device: '/home/${USER}/data/wp_files'
-         o: 'bind'
-
-
-
 services:
+
   nginx:
     build: requierement/nginx
     container_name: nginx
@@ -27,11 +12,25 @@ services:
       .env
     volumes:
       - wp_files:/var/www/html
-    depends_on:
-      - wordpress
     networks:
       - inception
     restart: unless-stopped
+
+
+volumes:
+     wp_database: 
+       driver: local
+       driver_opts:
+         type: none
+         device: /Users/${USER}/data/wp_database
+         o: bind
+     wp_files:
+       driver: local
+       driver_opts:
+         type: none
+         device: /Users/${USER}/data/wp_files
+         o: bind
+
 
 networks:
   inception: {}
