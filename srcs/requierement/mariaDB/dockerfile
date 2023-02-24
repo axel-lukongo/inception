@@ -1,0 +1,9 @@
+from debian:buster
+
+RUN apt-get update -y && apt-get upgrade -y && apt-get install mariadb-server -y
+
+RUN mkdir -p /var/run/mysqld \
+&& chown -R mysql:mysql /var/run/mysqld \
+&& chmod 777 /var/run/mysqld
+
+EXPOSE 3306
