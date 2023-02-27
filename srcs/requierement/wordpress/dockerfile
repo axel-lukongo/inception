@@ -8,12 +8,14 @@ RUN			apt-get install php7.3-mysql -y
 
 COPY		./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
+EXPOSE		9000
+
 RUN			mkdir /usr/share/wordpress
 WORKDIR		/usr/share/wordpress
 
 COPY		tools/configure.sh ./
 RUN			chmod +x ./configure.sh
 
-EXPOSE		9000
 
 ENTRYPOINT	./configure.sh
+CMD ["/usr/sbin/php-fpm7.3", "-F"]

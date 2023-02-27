@@ -1,9 +1,21 @@
 from debian:buster
 
-RUN apt-get update -y && apt-get upgrade -y && apt-get install mariadb-server -y
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install mariadb-server -y && apt-get install mariadb-client -y
 
-RUN mkdir -p /var/run/mysqld \
-&& chown -R mysql:mysql /var/run/mysqld \
-&& chmod 777 /var/run/mysqld
+RUN mkdir -p /var/run/mysql \
+&& chown -R mysql:mysql /var/run/mysql \
+&& chmod 777 /var/run/mysql
+
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql --auth-root-authentication-method=normal --skip-test-db
+
+COPY /conf/maria.cnf /etc/mysql/maria.cnf
+
+COPY /tools/my_config.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/my_config.sh"]
 
 EXPOSE 3306
+
+
+CMD ["/usr/bin/mysql_safe", "--datadir=/var/run/mysql"]
