@@ -1,12 +1,13 @@
+
 all: up
 
 up:
-	cd srcs && docker-compose up
+	cd srcs && sudo docker-compose up
 down:
-	cd srcs && docker-compose down
+	cd srcs && sudo docker-compose down
 	
 clean:
-	docker system prune -af
+	sudo docker system prune -af
 
 re:
 	cd srcs && docker-compose up --build

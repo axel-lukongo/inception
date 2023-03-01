@@ -1,0 +1,88 @@
+#https://exampleconfig.com/view/mariadb-ubuntu18-04-etc-mysql-mariadb-conf-d-50-server-cnf
+#https://mariadb.com/kb/en/server-system-variables/#about-the-server-system-variables
+
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql
+
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+[mysqld]
+
+#
+# * Basic Settings
+#
+user                    = mysql
+ # mysql user is the default
+
+pid-file                = /run/mysqld/mysqld.pid 
+# pid file location is the default 
+
+socket                  = /run/mysqld/mysqld.sock 
+# socket file location is the default  
+
+#port                   = 3306
+ # port is the default 
+
+basedir                 = /usr 
+# basedir is the default Path to the MariaDB installation directory.
+
+datadir                 = /var/lib/mysql
+ # datadir is the default  Path to the database root directory.
+
+tmpdir                  = /tmp 
+# tmpdir is the default Path to the temporary directory.
+
+lc-messages-dir         = /usr/share/mysql # lc-messages-dir is the default  
+#skip-external-locking
+
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+
+bind-address            = 0.0.0.0 # bind to all interfaces  (default is localhost)
+
+#lower_case_table_names=1
+
+
+
+#
+# * Query Cache Configuration
+#
+#query_cache_limit      = 1M
+
+query_cache_size        = 16M
+ # query cache size is the default 
+
+#
+# * Logging and Replication
+#
+# Both location gets rotated by the cronjob.
+# Be aware that this log type is a performance killer.
+# As of 5.1 you can enable the log at runtime!
+#general_log_file       = /var/log/mysql/mysql.log
+#general_log            = 1
+#
+# Error log - should be very few entries.
+#
+
+log_error = /var/log/mysql/error.log 
+# error log location is the default 
+
+expire_logs_days        = 10 
+# expire logs after 10 days 
+
+#
+# * Character sets
+#
+# MySQL/MariaDB default is Latin1, but in Debian we rather default to the full
+# utf8 4-byte character set. See also client.cnf
+#
+character-set-server  = utf8mb4  
+# utf8mb4 is the default 
+
+collation-server      = utf8mb4_general_ci 
+# utf8mb4_general_ci is the default 
