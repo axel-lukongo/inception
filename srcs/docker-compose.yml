@@ -1,5 +1,21 @@
 version: "3"
+
 services:
+
+  mariadb:
+    container_name: mariadb
+    build: requierement/mariadb
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - wp_database:/var/lib/mysql
+    networks:
+      - inception
+    # restart: unless-stopped
+
+
   wordpress:
     container_name: wordpress
     build: requierement/wordpress
@@ -7,13 +23,13 @@ services:
       - "9000:9000"
     env_file:
       - .env
-  # depends_on:
-  #   - mariadb
+    depends_on:
+      - mariadb
     volumes:
       - wp_files:/var/www/html
     networks:
       - inception
-    #restart: unless-stopped
+    # restart: unless-stopped
 
   nginx:
     build: requierement/nginx
@@ -25,26 +41,26 @@ services:
       .env
     volumes:
       - wp_files:/var/www/html
-    # depends_on:
-    #   - wordpress
+    depends_on:
+      - wordpress
     networks:
       - inception
     restart: unless-stopped
 
 
 volumes:
-     wp_database: 
-       driver: local
-       driver_opts:
-         type: none
-         device: /Users/${USER}/data/wp_database
-         o: bind
-     wp_files:
-       driver: local
-       driver_opts:
-         type: none
-         device: /Users/${USER}/data/wp_files
-         o: bind
+  wp_database: 
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/${USER}/data/wp_database
+  wp_files:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/${USER}/data/wp_files
 
 
 networks:
