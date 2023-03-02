@@ -24,10 +24,10 @@
 define( 'DB_NAME', "$DB_NAME" );  
 
 /** Database username */
-define( 'DB_ADMIN', "$DB_ADMIN" ); #
+define( 'DB_USER', "$DB_USER" ); 
 
 /** Database password */
-define( 'DB_ADMIN_PASSWORD', "$DB_ADMIN_PASSWORD" ); 
+define( 'DB_PASSWORD', "$DB_PASSWORD" ); 
 
 /** Database hostname */
 define( 'DB_HOST', 'mariadb:3306' ); # mariadb:3306  
@@ -50,7 +50,7 @@ define( 'DB_COLLATE', '' );
  * @since 2.6.0
  */
 
-define('WP_CACHE_KEY_SALT', 'alukongo.42.fr'); # Changer la valeur de WP_CACHE_KEY_SALT pour invalider les cookies existants. Cela forcera tous les utilisateurs à se reconnecter.
+define('WP_CACHE_KEY_SALT', 'benmoham.42.fr'); # Changer la valeur de WP_CACHE_KEY_SALT pour invalider les cookies existants. Cela forcera tous les utilisateurs à se reconnecter.
 /**#@-*/
 
 /**

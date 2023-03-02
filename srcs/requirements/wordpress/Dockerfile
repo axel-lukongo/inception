@@ -31,18 +31,23 @@ RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 WORKDIR /
 COPY /conf/www.conf etc/php/7.3/fpm/pool.d
 
+RUN mkdir /var/www/big_monnais
 
-# COPY /conf/wp-config.php /var/www/wordpress/config
 
-COPY ./tools/my_script.sh /var/www/
-COPY ./ /var/www/wordpress/
+COPY / /var/www/wordpress/
+# COPY /conf/wp-config.php /var/www/big_monnais
+
+COPY /tools/my_script.sh /var/www/
 
 
 # RUN chmod 777 /var/www/wordpress/config/wp-config.php
-RUN chmod +x /var/www/my_script.sh
+RUN chmod 777 /var/www/my_script.sh
 
+# COPY /conf/wp-config.php /var/www/wordpress
 # stop the php7.3-fpm service 
 RUN  service php7.3-fpm start && service php7.3-fpm stop 
 
+WORKDIR /var/www/
+
 # set the my_script to the my_script.sh file
-ENTRYPOINT [ "/var/www/my_script.sh" ] 
+ENTRYPOINT ["bash", "my_script.sh"]
