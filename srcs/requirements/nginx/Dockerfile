@@ -1,39 +1,31 @@
-FROM debian:buster
+FROM    debian:buster
 
-RUN apt-get update -yq
-# update the debian image 
+#i install all that i need 
+RUN     apt-get -y update \
+        && apt-get -y upgrade \
+        && apt-get install -y  \
+        systemd \
+        nginx \
+        openssl \
+        vim
 
-RUN apt-get install nginx -y
-# update the debian image and install nginx
+# i expose this port because this is where i will mapped 
+EXPOSE  443
 
-RUN apt-get install openssl -y
-# update the debian image and install nginx and openssl 
+# i copy the config of nginx in the repos default
+COPY    ./config/nginx.conf /etc/nginx/sites-available/default
 
-RUN rm etc/nginx/sites-enabled/default
-#  remove the default file from the sites-enabled directory
+# i delete the original config file of nginx because i have my own config file
+RUN     rm -rf /etc/nginx/sites-enabled/default
 
-EXPOSE 443
-# expose the port 443 to the host machine
+# i creat an alias from sites-enabled/default to sites-available default, it mean if
+# we execute the file config in sites-enabled it will execute the file config in sites-available/default
+RUN     ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-WORKDIR /etc/nginx/
-# change the working directory to the nginx directory	
+RUN     mkdir -p /etc/nginx/ssl
 
-RUN openssl req -x509 -newkey rsa:2048 -nodes -keyout alukongo.42.fr.key -out alukongo.42.fr.crt -days 365 \
-	-subj "/C=FR/ST=France/L=Paris/O=42, Inc./OU=IT/CN=alukongo.42.fr"
-# generate a self-signed certificate for the server using openssl and the subject name alukongo.42.fr 
+RUN     openssl req -newkey rsa:2048 -x509 -days 365 -nodes -keyout /etc/nginx/ssl/services.key -out /etc/nginx/ssl/services.pem \
+        -subj "/C=FR/ST=Paris/L=Paris/O=42, Inc./OU=IT/CN=Inception"
 
-WORKDIR /
-# change the working directory to the root directory
 
-COPY /nginx.conf /etc/nginx/sites-available/default
-# copy the nginx.conf file to the default file
-
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/ && rm -rf /var/www/html
-# create a symbolic link to the default file in the sites-enabled directory and remove the html folder from the var/www directory
-
-VOLUME "/var/www/wordpress"
-# create a volume to the wordpress folder
-
-ENTRYPOINT nginx -g 'daemon off;'
-# start the nginx server in the foreground so that the container does not stop 
-# after the server is started and the container is still running in the background 
+CMD     ["nginx", "-g", "daemon off;"]

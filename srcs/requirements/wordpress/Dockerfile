@@ -1,53 +1,34 @@
-FROM debian:buster
+FROM    debian:buster
 
-# apt-get update is used to update the debian image -q is for quiet mode quiet mode is used to avoid the output of the update
-RUN apt-get update -yq
+RUN     apt-get -y update \
+        && apt-get install -y  \
+        php7.3-cli \
+        php7.3-common \
+        php7.3-curl \
+        php7.3-mbstring \
+        php7.3-mysql \
+        php-fpm curl \
+        mariadb-client \
+        curl 
 
-# install php-fpm  
-RUN apt install php-fpm -yq
+EXPOSE  9000
 
-RUN apt-get -y install php-cli php-mysql php-curl php-gd php-intl
+#i copy my config file in pool.d
+COPY    ./config/www.conf /etc/php/7.3/fpm/pool.d/
 
-# expose the port 9000 to the host machine
-EXPOSE 9000
+RUN     mkdir -p /run/php
 
-# set the working directory to the var/www directory
-WORKDIR /var/www/
+# i move in this repo
+WORKDIR /var/www/html/
 
-# update the debian image 
-RUN apt-get update -yq  
+# i install the CLI
+RUN     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && php wp-cli.phar --info 
+RUN     chmod +x wp-cli.phar
+RUN     mv wp-cli.phar /usr/local/bin/wp
+RUN     wp --info
+COPY    ./tools/my_script.sh .
 
-# update the debian image and install wget  install php7.3 php-mysqli php-fpm  
-RUN apt-get install wget -yq && apt-get install -yq php7.3 php-mysqli php-fpm
-
-# download the wp-cli.phar file 
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-
-# make the wp-cli.phar file executable and move it to the usr/local/bin directory 
-RUN chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
-
-# RUN mkdir -p /var/www/wordpress/config/
-# set the working directory to the root directory
-WORKDIR /
-COPY /conf/www.conf etc/php/7.3/fpm/pool.d
-
-RUN mkdir /var/www/big_monnais
-
-
-COPY / /var/www/wordpress/
-# COPY /conf/wp-config.php /var/www/big_monnais
-
-COPY /tools/my_script.sh /var/www/
-
-
-# RUN chmod 777 /var/www/wordpress/config/wp-config.php
-RUN chmod 777 /var/www/my_script.sh
-
-# COPY /conf/wp-config.php /var/www/wordpress
-# stop the php7.3-fpm service 
-RUN  service php7.3-fpm start && service php7.3-fpm stop 
-
-WORKDIR /var/www/
-
-# set the my_script to the my_script.sh file
 ENTRYPOINT ["bash", "my_script.sh"]
+
+
+
