@@ -1,4 +1,3 @@
 si jamais il y'a des probleme au moment d'acceder a notre site,
 il faut verifier que on a rajouter le nom du site ainsi que l'address IP dans le hosts
 (/etc/hosts)
-
