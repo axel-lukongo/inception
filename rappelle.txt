@@ -1,8 +1,0 @@
-si jamais il y'a des probleme au moment d'acceder a notre site,
-il faut verifier que on a rajouter le nom du site ainsi que l'address IP dans le hosts
-(/etc/hosts)
-
-******verifier la table dans db *********
-  1)mysql -u root -p<password> <name of my DB>
-  2)SELECT * FROM we_users
-*****************************************
